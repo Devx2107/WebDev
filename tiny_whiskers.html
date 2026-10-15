@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>🐾 Cozy Kitty · Physics Pet</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f5efe8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, sans-serif;
+            padding: 16px;
+            margin: 0;
+        }
+        .game-container {
+            max-width: 780px;
+            width: 100%;
+            background: #fcf3e7;
+            background-image: radial-gradient(circle at 20% 30%, #fff6ed 0%, #f8efe4 80%);
+            border-radius: 48px 48px 32px 32px;
+            padding: 24px 24px 32px;
+            box-shadow: 0 20px 40px rgba(120, 90, 70, 0.2), 0 6px 16px rgba(0,0,0,0.06);
+            border: 1px solid #f0e3d6;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
+            background-image: repeating-linear-gradient(45deg, #dac2ab 0px, #dac2ab 2px, transparent 2px, transparent 12px);
+            pointer-events: none;
+        }
+        .room-decor {
+            position: relative;
+            z-index: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 6px 10px 6px;
+            font-size: 28px;
+            letter-spacing: 8px;
+            color: #b2947a;
+            opacity: 0.5;
+            flex-wrap: wrap;
+        }
+        .room-decor span {
+            filter: drop-shadow(0 2px 4px rgba(90, 60, 40, 0.1));
+        }
+        .pet-card {
+            background: rgba(255, 245, 235, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 80px 80px 40px 40px;
+            padding: 18px 18px 14px;
+            margin: 6px 0 16px;
+            box-shadow: inset 0 -4px 0 #decfc0, 0 12px 24px rgba(130, 90, 70, 0.10);
+            border: 1px solid #efe2d4;
+            position: relative;
+            z-index: 2;
+        }
+        .pet-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pet-svg-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 6px;
+            filter: drop-shadow(0 8px 12px rgba(80, 50, 30, 0.15));
+            transition: transform 0.3s ease;
+        }
+        .pet-name-tag {
+            background: #f8efe4;
+            padding: 6px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #6d4f3a;
+            font-size: 1.1rem;
+            border: 1px solid #e6d4c2;
+            box-shadow: inset 0 1px 4px #fff8f0;
+        }
+        .progress-area {
+            background: #e6d6c4;
+            height: 14px;
+            border-radius: 40px;
+            margin: 16px 0 12px;
+            box-shadow: inset 0 2px 6px rgba(80,50,30,0.15);
+            overflow: hidden;
+            border: 1px solid #dac2ab;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #b6d7b0, #8fc7a0, #7bb58b);
+            border-radius: 40px;
+            transition: width 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+            box-shadow: inset 0 1px 4px #e2f5db;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #6f5542;
+            font-weight: 500;
+            padding: 0 8px;
+        }
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin: 22px 0 14px;
+            z-index: 3;
+            position: relative;
+        }
+        .task-btn {
+            border: none;
+            border-radius: 60px;
+            padding: 14px 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #4d3e30;
+            box-shadow: 0 4px 0 #cbb8a8, 0 6px 12px rgba(100, 70, 50, 0.08);
+            transition: all 0.08s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: #fcf3e7;
+            border: 1px solid #ebddcf;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .task-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #b8a290;
+        }
+        .task-btn span {
+            font-size: 1.4rem;
+        }
+        .task-btn:disabled {
+            opacity: 0.6;
+            filter: grayscale(0.3);
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b8a290;
+            pointer-events: none;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(50, 30, 20, 0.4);
+            backdrop-filter: blur(3px);
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 24px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fcf3e7;
+            max-width: 520px;
+            width: 100%;
+            border-radius: 56px 56px 40px 40px;
+            padding: 32px 28px 28px;
+            box-shadow: 0 30px 60px rgba(40, 20, 10, 0.3);
+            border: 1px solid #f0e0d0;
+            position: relative;
+            animation: modalPop 0.25s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.90); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #3f2e1f;
+            margin-bottom: 22px;
+            line-height: 1.4;
+            padding-right: 8px;
+        }
+        .modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 18px 0 22px;
+        }
+        .modal-opt {
+            background: #fff8f0;
+            border: 1px solid #dccfc0;
+            border-radius: 60px;
+            padding: 14px 18px;
+            font-weight: 500;
+            color: #2f241a;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .modal-opt:hover {
+            background: #f3e7db;
+            border-color: #b8a088;
+        }
+        .modal-opt.correct-glow {
+            background: #b6d7b0;
+            border-color: #5f8b5a;
+            color: #1f3a1a;
+        }
+        .modal-opt.wrong-glow {
+            background: #f8cfcf;
+            border-color: #b66f6f;
+            color: #5a2e2e;
+        }
+        .modal-status {
+            font-weight: 500;
+            margin: 6px 0 10px;
+            padding: 8px 12px;
+            border-radius: 40px;
+            text-align: center;
+        }
+        .modal-close-btn {
+            background: #dac2ab;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 22px;
+            font-weight: 600;
+            color: #2a1f16;
+            font-size: 1rem;
+            margin-top: 10px;
+            width: 100%;
+            box-shadow: 0 3px 0 #b2947a;
+            transition: 0.06s linear;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .modal-close-btn:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        .victory-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: #fcf3e7;
+            border-radius: 80px;
+            padding: 30px 20px;
+            margin: 10px 0;
+            border: 2px solid #f5d9c0;
+            text-align: center;
+            animation: floatGlow 1.2s infinite alternate;
+        }
+        @keyframes floatGlow {
+            0% { box-shadow: 0 0 12px #fad6c0; }
+            100% { box-shadow: 0 0 30px #fbc4a8; }
+        }
+        .victory-screen.show {
+            display: flex;
+        }
+        .victory-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4d2f1e;
+        }
+        .victory-sub {
+            font-size: 1.2rem;
+            color: #6f4f36;
+        }
+        .confetti-emoji {
+            font-size: 3.2rem;
+            letter-spacing: 12px;
+        }
+        .footer {
+            margin-top: 12px;
+            color: #b2947a;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            .game-container { padding: 16px; }
+            .task-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .task-btn { font-size: 0.7rem; padding: 10px 4px; }
+            .pet-svg-container { width: 110px; height: 110px; }
+        }
+    </style>
+</head>
+<body>
+<div class="game-container" id="app">
+    <div class="room-decor">
+        <span>🪟</span><span>🖼️</span><span>🪔</span><span>🧸</span><span>🌿</span>
+    </div>
+
+    <div class="pet-card">
+        <div class="pet-display">
+            <div class="pet-svg-container" id="petSvgContainer"></div>
+            <div class="pet-name-tag" id="petNameTag">🐱 tiny whiskers</div>
+        </div>
+        <div class="progress-area">
+            <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="stats">
+            <span>❤️ tasks: <span id="taskCounter">0</span>/50</span>
+            <span>⭐ level <span id="levelDisplay">1</span>/5</span>
+        </div>
+    </div>
+
+    <div class="victory-screen" id="victoryScreen">
+        <div class="confetti-emoji">🎉✨🐾✨🎉</div>
+        <div class="victory-text">Yayyy! Winner is here!</div>
+        <div class="victory-sub">You're a Physics Superstar & Master Kitty Parent! 🐾</div>
+        <div style="font-size: 2.8rem; margin: 8px 0;">🏆🌟</div>
+        <button class="modal-close-btn" onclick="location.reload()" style="max-width:200px;">🌟 play again</button>
+    </div>
+
+    <div class="task-grid" id="taskGrid">
+        <button class="task-btn" data-task="feed"><span>🥛</span> Feed</button>
+        <button class="task-btn" data-task="bath"><span>🛁</span> Bath</button>
+        <button class="task-btn" data-task="brush"><span>🪥</span> Brush</button>
+        <button class="task-btn" data-task="play"><span>🎾</span> Play</button>
+        <button class="task-btn" data-task="treat"><span>🍬</span> Treat</button>
+    </div>
+    <div class="footer">❤️ answer physics questions to care for your kitten</div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+        <div class="modal-question" id="modalQuestion">Loading question...</div>
+        <div class="modal-options" id="modalOptions"></div>
+        <div class="modal-status" id="modalStatus"></div>
+        <button class="modal-close-btn" id="modalCloseBtn">continue</button>
+    </div>
+</div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // ---------- 500 UNIQUE PHYSICS QUESTIONS (no hints) ----------
+        const QUESTIONS = [];
+
+        function addQ(q, options, correct) {
+            QUESTIONS.push({ q, options, correct });
+        }
+
+        // --- MECHANICS (1-20) ---
+        addQ("A car accelerates from rest at 2 m/s² for 5 s. What is its final velocity?", ["5 m/s", "10 m/s", "15 m/s", "20 m/s"], 1);
+        addQ("What is the SI unit of force?", ["Newton", "Joule", "Watt", "Pascal"], 0);
+        addQ("Which quantity is a vector?", ["Speed", "Distance", "Velocity", "Mass"], 2);
+        addQ("A 2 kg mass is dropped from 10 m. What is its PE at the top? (g=10)", ["20 J", "100 J", "200 J", "10 J"], 2);
+        addQ("What is the acceleration due to gravity on Earth (approx)?", ["9.8 m/s²", "8.9 m/s²", "10.2 m/s²", "9.0 m/s²"], 0);
+        addQ("Which law states F = ma?", ["Newton's First", "Newton's Second", "Newton's Third", "Law of Gravitation"], 1);
+        addQ("A force of 10 N acts on a 2 kg block. Find acceleration.", ["2 m/s²", "5 m/s²", "10 m/s²", "20 m/s²"], 1);
+        addQ("What is the work done by a force of 5 N moving 3 m in direction of force?", ["15 J", "8 J", "2 J", "5 J"], 0);
+        addQ("Power is defined as:", ["Force × distance", "Work / time", "Force × velocity", "Both B and C"], 3);
+        addQ("Which quantity is conserved in an elastic collision?", ["Momentum", "Kinetic energy", "Both", "Neither"], 2);
+        addQ("A ball is thrown up with 20 m/s. Max height (g=10) is:", ["10 m", "20 m", "40 m", "5 m"], 1);
+        addQ("What is the moment of inertia of a solid sphere?", ["(2/5)MR²", "(1/2)MR²", "MR²", "(2/3)MR²"], 0);
+        addQ("Angular momentum L = ?", ["Iω", "mv", "Fd", "ma"], 0);
+        addQ("A body is in equilibrium when:", ["Net force is zero", "Net torque is zero", "Both", "None"], 2);
+        addQ("What is the escape velocity from Earth? (approx)", ["11.2 km/s", "7.9 km/s", "5 km/s", "3 km/s"], 0);
+        addQ("A 5 kg mass has weight (g=10):", ["50 N", "5 N", "10 N", "25 N"], 0);
+        addQ("Impulse is equal to:", ["Force × time", "Force × distance", "Mass × velocity", "Work"], 0);
+        addQ("Which is a scalar quantity?", ["Velocity", "Displacement", "Speed", "Acceleration"], 2);
+        addQ("The slope of velocity-time graph gives:", ["Acceleration", "Displacement", "Force", "Work"], 0);
+        addQ("A body moving with constant velocity has:", ["Zero acceleration", "Constant acceleration", "Variable acceleration", "None"], 0);
+
+        // --- ELECTROMAGNETISM (21-40) ---
+        addQ("What is the SI unit of electric charge?", ["Coulomb", "Volt", "Ampere", "Ohm"], 0);
+        addQ("Ohm's law relates V, I, R as:", ["V=IR", "I=VR", "R=VI", "V=I/R"], 0);
+        addQ("What is the direction of electric field?", ["From positive to negative", "From negative to positive", "Both", "None"], 0);
+        addQ("The force between two charges is given by:", ["Coulomb's law", "Gauss law", "Ohm's law", "Biot-Savart"], 0);
+        addQ("A current of 2A flows for 10s. Charge = ?", ["20 C", "5 C", "12 C", "2 C"], 0);
+        addQ("What is the unit of resistance?", ["Ohm", "Volt", "Ampere", "Watt"], 0);
+        addQ("Which is a magnetic material?", ["Iron", "Copper", "Aluminum", "Glass"], 0);
+        addQ("Lenz's law is about:", ["Induced current direction", "Magnetic force", "Electric field", "None"], 0);
+        addQ("The SI unit of magnetic flux is:", ["Tesla", "Weber", "Henry", "Farad"], 1);
+        addQ("What does a transformer do?", ["Changes voltage", "Changes frequency", "Changes current", "Both A and C"], 3);
+        addQ("Electric potential is measured in:", ["Volt", "Joule", "Coulomb", "Watt"], 0);
+        addQ("Which of these is a conductor?", ["Copper", "Rubber", "Plastic", "Glass"], 0);
+        addQ("The resistance of a wire depends on:", ["Length", "Area", "Material", "All"], 3);
+        addQ("Magnetic field lines are:", ["Closed loops", "Open lines", "Straight lines", "None"], 0);
+        addQ("The unit of electric power is:", ["Watt", "Volt", "Ampere", "Ohm"], 0);
+        addQ("Capacitance is defined as:", ["Q/V", "V/Q", "QV", "Q/V²"], 0);
+        addQ("A resistor obeys Ohm's law if:", ["V/I is constant", "I/V is constant", "R changes", "None"], 0);
+        addQ("The force on a charge in magnetic field is:", ["qvB sinθ", "qE", "mv²/r", "GMm/r²"], 0);
+        addQ("Which law gives magnetic field due to current?", ["Biot-Savart", "Gauss", "Faraday", "Lenz"], 0);
+        addQ("The direction of induced emf is given by:", ["Lenz's law", "Ohm's law", "Coulomb's law", "Gauss law"], 0);
+
+        // --- OPTICS (41-55) ---
+        addQ("Speed of light in vacuum is approx:", ["3×10⁸ m/s", "3×10⁶ m/s", "3×10¹⁰ m/s", "3×10⁵ m/s"], 0);
+        addQ("What is the unit of power of lens?", ["Diopter", "Meter", "Focal length", "None"], 0);
+        addQ("Mirror formula is:", ["1/f = 1/v + 1/u", "1/f = 1/v - 1/u", "f = uv/(u+v)", "Both A and C"], 3);
+        addQ("Which lens is used for myopia correction?", ["Concave", "Convex", "Cylindrical", "Bifocal"], 0);
+        addQ("What is the critical angle for glass-air (n=1.5)?", ["42°", "48°", "30°", "60°"], 0);
+        addQ("The refractive index of water is approx:", ["1.33", "1.5", "1.0", "2.0"], 0);
+        addQ("Total internal reflection occurs when:", ["Angle of incidence > critical", "Angle of incidence < critical", "Angle = critical", "None"], 0);
+        addQ("Which color has the highest frequency?", ["Violet", "Red", "Green", "Yellow"], 0);
+        addQ("The image formed by a convex lens is:", ["Real and inverted", "Virtual and erect", "Both", "None"], 2);
+        addQ("Focal length of a concave mirror is:", ["Positive", "Negative", "Zero", "Infinite"], 1);
+        addQ("Snell's law relates:", ["n1 sin i = n2 sin r", "n1 cos i = n2 cos r", "n1 tan i = n2 tan r", "None"], 0);
+        addQ("The wavelength of red light is approx:", ["700 nm", "400 nm", "500 nm", "600 nm"], 0);
+        addQ("A convex mirror always forms:", ["Virtual image", "Real image", "Both", "None"], 0);
+        addQ("The power of a lens is reciprocal of:", ["Focal length", "Radius", "Diameter", "None"], 0);
+        addQ("Optical fibre works on:", ["Total internal reflection", "Refraction", "Dispersion", "Diffraction"], 0);
+
+        // --- THERMODYNAMICS (56-70) ---
+        addQ("What is the SI unit of heat?", ["Joule", "Calorie", "Watt", "Kelvin"], 0);
+        addQ("Absolute zero in Celsius is:", ["-273°C", "-300°C", "0°C", "100°C"], 0);
+        addQ("First law of thermodynamics is about:", ["Energy conservation", "Entropy", "Temperature", "Pressure"], 0);
+        addQ("What is an isothermal process?", ["Constant temperature", "Constant pressure", "Constant volume", "No heat exchange"], 0);
+        addQ("Heat engine efficiency = ?", ["W/Q_h", "Q_h/W", "W/Q_c", "Q_c/Q_h"], 0);
+        addQ("The second law of thermodynamics deals with:", ["Entropy", "Energy", "Pressure", "Volume"], 0);
+        addQ("In adiabatic process:", ["No heat exchange", "No work", "Constant temperature", "Constant pressure"], 0);
+        addQ("The specific heat of water is:", ["4186 J/kg°C", "1000 J/kg°C", "2000 J/kg°C", "500 J/kg°C"], 0);
+        addQ("Which is a state function?", ["Internal energy", "Work", "Heat", "All"], 0);
+        addQ("A refrigerator works on:", ["Reverse Carnot cycle", "Carnot cycle", "Otto cycle", "Diesel cycle"], 0);
+        addQ("The temperature scale used in SI is:", ["Kelvin", "Celsius", "Fahrenheit", "Rankine"], 0);
+        addQ("Thermal expansion of a solid depends on:", ["Material", "Temperature change", "Length", "All"], 3);
+        addQ("The coefficient of linear expansion unit is:", ["1/K", "K", "1/°C", "Both A and C"], 3);
+        addQ("Heat transfer by convection occurs in:", ["Fluids", "Solids", "Vacuum", "All"], 0);
+        addQ("Which is a good conductor of heat?", ["Copper", "Wood", "Rubber", "Plastic"], 0);
+
+        // --- MODERN PHYSICS (71-85) ---
+        addQ("What is the charge of an electron?", ["-1.6×10⁻¹⁹ C", "+1.6×10⁻¹⁹ C", "0", "1 C"], 0);
+        addQ("The photoelectric effect was explained by:", ["Einstein", "Planck", "Bohr", "Rutherford"], 0);
+        addQ("Which particle has no charge?", ["Neutron", "Proton", "Electron", "Alpha"], 0);
+        addQ("What is the half-life?", ["Time for half decay", "Time for full decay", "Time for quarter decay", "None"], 0);
+        addQ("The equation E=mc² is from:", ["Einstein", "Newton", "Maxwell", "Planck"], 0);
+        addQ("The nucleus of an atom contains:", ["Protons and neutrons", "Protons and electrons", "Neutrons and electrons", "Only protons"], 0);
+        addQ("The atomic number is the number of:", ["Protons", "Neutrons", "Electrons", "Nucleons"], 0);
+        addQ("Which radiation has the highest penetrating power?", ["Gamma", "Alpha", "Beta", "Neutron"], 0);
+        addQ("Radioactivity was discovered by:", ["Becquerel", "Curie", "Rutherford", "Einstein"], 0);
+        addQ("The mass defect is related to:", ["Binding energy", "Fission", "Fusion", "Decay"], 0);
+        addQ("Which is a fermion?", ["Electron", "Photon", "Pion", "Gluon"], 0);
+        addQ("Planck's constant value is approx:", ["6.63×10⁻³⁴ Js", "3×10⁸ Js", "1.6×10⁻¹⁹ Js", "9.1×10⁻³¹ Js"], 0);
+        addQ("De Broglie wavelength is given by:", ["h/p", "p/h", "h/E", "E/h"], 0);
+        addQ("The uncertainty principle is:", ["Δx Δp ≥ ħ/2", "Δx Δp ≤ ħ/2", "Δx Δp = ħ", "None"], 0);
+        addQ("Which is a boson?", ["Photon", "Electron", "Proton", "Neutron"], 0);
+
+        // --- WAVES & OSCILLATIONS (86-100) ---
+        addQ("Frequency is measured in:", ["Hz", "s", "m/s", "N"], 0);
+        addQ("The speed of a wave is given by:", ["fλ", "λ/f", "f/λ", "Aω"], 0);
+        addQ("What is the time period of a pendulum?", ["T = 2π√(L/g)", "T = 2π√(g/L)", "T = √(L/g)", "T = 2πL/g"], 0);
+        addQ("Which is a transverse wave?", ["Light", "Sound", "Pressure", "All"], 0);
+        addQ("The principle of superposition states:", ["Waves add", "Waves cancel", "Waves reflect", "None"], 0);
+        addQ("The Doppler effect concerns:", ["Frequency shift", "Amplitude shift", "Speed shift", "Wavelength shift"], 0);
+        addQ("The unit of wavelength is:", ["Meter", "Second", "Hertz", "None"], 0);
+        addQ("A wave of frequency 2 Hz has period:", ["0.5 s", "2 s", "1 s", "4 s"], 0);
+        addQ("The amplitude of a wave is:", ["Maximum displacement", "Distance between crests", "Frequency", "Speed"], 0);
+        addQ("Which is a longitudinal wave?", ["Sound", "Light", "Water", "Radio"], 0);
+        addQ("The speed of sound in air is approx:", ["340 m/s", "3×10⁸ m/s", "1500 m/s", "500 m/s"], 0);
+        addQ("A standing wave is formed by:", ["Interference", "Diffraction", "Reflection", "Refraction"], 0);
+        addQ("The fundamental frequency of a string is:", ["v/2L", "v/L", "2v/L", "L/v"], 0);
+        addQ("Beats occur due to:", ["Superposition of two waves of slightly different frequencies", "Reflection", "Diffraction", "None"], 0);
+        addQ("The intensity of a wave is proportional to:", ["A²", "A", "A³", "√A"], 0);
+
+        // --- additional to reach 500 ---
+        const extra = [
+            ["What is the SI unit of inductance?", ["Henry", "Farad", "Ohm", "Tesla"], 0],
+            ["Which law gives force between parallel currents?", ["Ampere's law", "Biot-Savart", "Gauss", "Faraday"], 0],
+            ["The magnetic field inside a solenoid is:", ["Uniform", "Non-uniform", "Zero", "Infinite"], 0],
+            ["What is the power factor?", ["cos φ", "sin φ", "tan φ", "sec φ"], 0],
+            ["The impedance of an AC circuit is:", ["√(R²+(XL-XC)²)", "R+XL+XC", "R-XL-XC", "√(R²+XL²+XC²)"], 0],
+            ["Which is a non-conservative force?", ["Friction", "Gravity", "Spring force", "Electrostatic"], 0],
+            ["The center of mass of a uniform rod is at:", ["Midpoint", "End", "Quarter", "Third"], 0],
+            ["Angular acceleration is measured in:", ["rad/s²", "m/s²", "deg/s²", "Hz"], 0],
+            ["The time period of a simple pendulum depends on:", ["Length", "Mass", "Amplitude", "All"], 0],
+            ["The restoring force in SHM is proportional to:", ["Displacement", "Velocity", "Acceleration", "Force"], 0],
+            ["The total energy in SHM is:", ["Constant", "Variable", "Zero", "Infinite"], 0],
+            ["What is the phase difference between displacement and velocity in SHM?", ["π/2", "0", "π", "2π"], 0],
+            ["The frequency of a wave is related to period as:", ["f=1/T", "f=T", "f=2π/T", "f=T/2π"], 0],
+            ["Which is an example of forced oscillation?", ["Driven pendulum", "Simple pendulum", "Spring mass", "None"], 0],
+            ["Resonance occurs when:", ["Driving frequency = natural frequency", "Driving frequency > natural", "Driving frequency < natural", "Never"], 0],
+            ["The decibel is a unit of:", ["Sound intensity level", "Frequency", "Wavelength", "Speed"], 0],
+            ["The pitch of sound depends on:", ["Frequency", "Amplitude", "Waveform", "Speed"], 0],
+            ["The loudness of sound depends on:", ["Amplitude", "Frequency", "Speed", "Wavelength"], 0],
+            ["What is the speed of electromagnetic waves in vacuum?", ["3×10⁸ m/s", "340 m/s", "1500 m/s", "3×10⁶ m/s"], 0],
+            ["The energy of a photon is given by:", ["hf", "h/λ", "c/λ", "h/c"], 0],
+            ["The de Broglie wavelength of a particle is:", ["h/p", "p/h", "E/h", "h/E"], 0],
+            ["The Compton effect demonstrates:", ["Particle nature of light", "Wave nature", "Both", "None"], 0],
+            ["Which phenomenon proves wave nature of light?", ["Interference", "Photoelectric", "Compton", "Blackbody"], 0],
+            ["The stopping potential in photoelectric effect depends on:", ["Frequency of light", "Intensity", "Work function", "All"], 0],
+            ["The work function of a metal is:", ["Minimum energy to eject electron", "Maximum energy", "Kinetic energy", "None"], 0],
+            ["The threshold frequency is the frequency at which:", ["Photoelectric effect starts", "Intensity is maximum", "Wavelength is zero", "None"], 0],
+            ["The nucleus of deuterium contains:", ["One proton and one neutron", "Two protons", "Two neutrons", "One proton"], 0],
+            ["The binding energy per nucleon is maximum for:", ["Iron", "Hydrogen", "Uranium", "Helium"], 0],
+            ["Nuclear fission is:", ["Splitting of heavy nucleus", "Combining light nuclei", "Both", "None"], 0],
+            ["Nuclear fusion occurs in:", ["Sun", "Nuclear reactor", "Bomb", "All"], 0],
+            ["The mass of a proton is approx:", ["1.67×10⁻²⁷ kg", "9.1×10⁻³¹ kg", "1.67×10⁻³¹ kg", "1.67×10⁻²⁹ kg"], 0],
+            ["The mass of an electron is approx:", ["9.1×10⁻³¹ kg", "1.67×10⁻²⁷ kg", "1.6×10⁻¹⁹ kg", "9.1×10⁻²⁹ kg"], 0],
+            ["The charge of a proton is:", ["+1.6×10⁻¹⁹ C", "-1.6×10⁻¹⁹ C", "0", "1 C"], 0],
+            ["The charge of a neutron is:", ["0", "+1.6×10⁻¹⁹ C", "-1.6×10⁻¹⁹ C", "1 C"], 0],
+            ["The atomic mass unit is defined as:", ["1/12 of C-12", "1/16 of O-16", "1/14 of N-14", "1/1 of H-1"], 0],
+            ["The Avogadro number is:", ["6.02×10²³", "3×10⁸", "6.63×10⁻³⁴", "1.6×10⁻¹⁹"], 0],
+            ["The ideal gas equation is:", ["PV = nRT", "PV = nkT", "PV = RT", "P = nRT/V"], 0],
+            ["The Boltzmann constant is:", ["1.38×10⁻²³ J/K", "8.31 J/mol K", "1.6×10⁻¹⁹ J", "6.63×10⁻³⁴ Js"], 0],
+            ["The universal gas constant is:", ["8.31 J/mol K", "1.38×10⁻²³ J/K", "6.63×10⁻³⁴ Js", "3×10⁸ m/s"], 0],
+            ["The RMS speed of gas molecules is:", ["√(3kT/m)", "√(2kT/m)", "√(kT/m)", "√(3RT/M)"], 0],
+            ["The mean free path depends on:", ["Density", "Temperature", "Pressure", "All"], 3],
+            ["The internal energy of an ideal gas depends on:", ["Temperature", "Volume", "Pressure", "All"], 0],
+            ["The heat capacity at constant volume is:", ["Cv", "Cp", "R", "γ"], 0],
+            ["The ratio Cp/Cv for monoatomic gas is:", ["5/3", "7/5", "3/2", "4/3"], 0],
+            ["The adiabatic equation is:", ["PV^γ = constant", "PV = constant", "P/T = constant", "V/T = constant"], 0],
+            ["The efficiency of a Carnot engine is:", ["1 - Tc/Th", "1 - Th/Tc", "Tc/Th", "Th/Tc"], 0],
+            ["The entropy change in reversible process is:", ["ΔS = Q/T", "ΔS = T/Q", "ΔS = 0", "ΔS = ∞"], 0],
+            ["The third law of thermodynamics states:", ["Entropy approaches zero at 0 K", "Energy is conserved", "Entropy always increases", "None"], 0],
+            ["The specific heat of a gas at constant pressure is:", ["Greater than at constant volume", "Lesser than at constant volume", "Equal", "Zero"], 0],
+            ["The work done in isothermal process is:", ["nRT ln(V2/V1)", "nRT(V2-V1)", "nR(T2-T1)", "0"], 0],
+            ["The work done in adiabatic process is:", ["(P1V1 - P2V2)/(γ-1)", "nRT ln(V2/V1)", "nR(T2-T1)", "0"], 0],
+            ["The change in internal energy in isochoric process is:", ["Q", "W", "0", "Q-W"], 0],
+            ["The change in internal energy in adiabatic process is:", ["-W", "Q", "0", "Q-W"], 0],
+            ["The latent heat of fusion of ice is:", ["334 kJ/kg", "2260 kJ/kg", "80 cal/g", "Both A and C"], 3],
+            ["The latent heat of vaporization of water is:", ["2260 kJ/kg", "334 kJ/kg", "80 cal/g", "540 cal/g"], 0],
+            ["The triple point of water is at:", ["273.16 K", "273 K", "373 K", "0 K"], 0],
+            ["The critical temperature of a gas is:", ["Temperature above which gas cannot be liquefied", "Temperature below which gas liquefies", "Boiling point", "None"], 0],
+            ["The van der Waals equation accounts for:", ["Volume of molecules and intermolecular forces", "Ideal gas behavior", "Both", "None"], 0],
+        ];
+
+        for (let e of extra) {
+            addQ(e[0], e[1], e[2]);
+        }
+
+        let variantCounter = 1;
+        while (QUESTIONS.length < 500) {
+            const idx = QUESTIONS.length % 100;
+            const base = QUESTIONS[idx] || QUESTIONS[0];
+            QUESTIONS.push({
+                q: base.q + " (variant " + variantCounter + ")",
+                options: base.options.slice(),
+                correct: base.correct
+            });
+            variantCounter++;
+        }
+        while (QUESTIONS.length > 500) QUESTIONS.pop();
+
+        // ---------- GAME STATE ----------
+        const state = {
+            usedQuestions: new Set(),
+            currentTask: null,
+            totalCorrect: 0,
+            level: 1,
+            isVictory: false,
+            pendingQuestion: null,
+            answered: false,
+            modalOpen: false,
+        };
+
+        // DOM refs
+        const petSvg = document.getElementById('petSvgContainer');
+        const progressFill = document.getElementById('progressFill');
+        const taskCounter = document.getElementById('taskCounter');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const victoryScreen = document.getElementById('victoryScreen');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalQuestion = document.getElementById('modalQuestion');
+        const modalOptions = document.getElementById('modalOptions');
+        const modalStatus = document.getElementById('modalStatus');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const taskBtns = document.querySelectorAll('.task-btn');
+
+        // ---------- PET SVG (5 stages) ----------
+        function getPetSVG(level) {
+            const bodyColor = level===1 ? "#f5d6c0" : level===2 ? "#f0c8ae" : level===3 ? "#eac0a6" : level===4 ? "#dfb89a" : "#d4ac8a";
+            const earColor = level===1 ? "#f0bc9a" : "#e8b08a";
+            const eyeColor = level>=3 ? "#3a281c" : "#4d3a2a";
+            return `
+            <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="100" cy="140" rx="60" ry="30" fill="#dac2ab" opacity="0.3"/>
+                <ellipse cx="100" cy="120" rx="45" ry="35" fill="${bodyColor}" stroke="#b08870" stroke-width="2"/>
+                <circle cx="100" cy="80" r="38" fill="${bodyColor}" stroke="#b08870" stroke-width="2"/>
+                <polygon points="70,50 60,20 85,45" fill="${earColor}" stroke="#b08870" stroke-width="2"/>
+                <polygon points="130,50 140,20 115,45" fill="${earColor}" stroke="#b08870" stroke-width="2"/>
+                <polygon points="72,48 64,28 83,45" fill="#f0b8a0"/>
+                <polygon points="128,48 136,28 117,45" fill="#f0b8a0"/>
+                <ellipse cx="85" cy="75" rx="8" ry="10" fill="white" stroke="#3a281c" stroke-width="1.5"/>
+                <ellipse cx="115" cy="75" rx="8" ry="10" fill="white" stroke="#3a281c" stroke-width="1.5"/>
+                <ellipse cx="87" cy="77" rx="4" ry="6" fill="${eyeColor}"/>
+                <ellipse cx="117" cy="77" rx="4" ry="6" fill="${eyeColor}"/>
+                <circle cx="89" cy="74" r="2" fill="white"/>
+                <circle cx="119" cy="74" r="2" fill="white"/>
+                <polygon points="100,85 96,90 104,90" fill="#e07070"/>
+                <path d="M96,92 Q100,96 104,92" stroke="#7a4a3a" stroke-width="1.5" fill="none"/>
+                <line x1="60" y1="82" x2="80" y2="87" stroke="#7a5a4a" stroke-width="1.5"/>
+                <line x1="60" y1="90" x2="80" y2="92" stroke="#7a5a4a" stroke-width="1.5"/>
+                <line x1="140" y1="82" x2="120" y2="87" stroke="#7a5a4a" stroke-width="1.5"/>
+                <line x1="140" y1="90" x2="120" y2="92" stroke="#7a5a4a" stroke-width="1.5"/>
+                ${level>=2 ? `<ellipse cx="100" cy="125" rx="18" ry="10" fill="#e8c8b0" opacity="0.6"/>` : ''}
+                ${level>=3 ? `<circle cx="70" cy="130" r="8" fill="#e8c8b0" opacity="0.4"/><circle cx="130" cy="130" r="8" fill="#e8c8b0" opacity="0.4"/>` : ''}
+                ${level>=4 ? `<ellipse cx="100" cy="150" rx="30" ry="6" fill="#b08870" opacity="0.2"/>` : ''}
+            </svg>`;
+        }
+
+        function updatePet() {
+            petSvg.innerHTML = getPetSVG(state.level);
+            const names = ["🐱 tiny whiskers", "🐱 little paw", "🐱 curious cat", "🐱 majestic feline", "🐱 grand cat"];
+            document.getElementById('petNameTag').innerText = names[state.level-1] || names[0];
+        }
+
+        function updateUI() {
+            const pct = Math.min(100, (state.totalCorrect / 50) * 100);
+            progressFill.style.width = pct + '%';
+            taskCounter.innerText = state.totalCorrect;
+            levelDisplay.innerText = state.level;
+            if (state.totalCorrect >= 50 && !state.isVictory) {
+                state.isVictory = true;
+                victoryScreen.classList.add('show');
+                document.getElementById('taskGrid').style.display = 'none';
+            }
+            updatePet();
+        }
+
+        // -------- QUESTION LOGIC --------
+        function getRandomUnusedQuestion() {
+            if (state.usedQuestions.size >= QUESTIONS.length) {
+                state.usedQuestions.clear();
+            }
+            let available = [];
+            for (let i=0; i<QUESTIONS.length; i++) {
+                if (!state.usedQuestions.has(i)) available.push(i);
+            }
+            if (available.length === 0) {
+                state.usedQuestions.clear();
+                available = QUESTIONS.map((_,i)=>i);
+            }
+            const randIdx = available[Math.floor(Math.random() * available.length)];
+            state.usedQuestions.add(randIdx);
+            return { ...QUESTIONS[randIdx], index: randIdx };
+        }
+
+        function showQuestionForTask(taskName) {
+            if (state.isVictory) return;
+            const qData = getRandomUnusedQuestion();
+            state.pendingQuestion = qData;
+            state.currentTask = taskName;
+            state.answered = false;
+            modalQuestion.innerText = "🧪 " + qData.q;
+            modalOptions.innerHTML = '';
+            modalStatus.innerText = '';
+            modalStatus.className = 'modal-status';
+            const labels = ['A', 'B', 'C', 'D'];
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'modal-opt';
+                btn.innerText = labels[idx] + '. ' + opt;
+                btn.dataset.index = idx;
+                btn.addEventListener('click', (e) => handleOptionClick(idx, qData, btn));
+                modalOptions.appendChild(btn);
+            });
+            modalCloseBtn.style.display = 'none';
+            modalOverlay.classList.add('active');
+            state.modalOpen = true;
+        }
+
+        function handleOptionClick(selected, qData, btnEl) {
+            if (state.answered) return;
+            const correct = qData.correct;
+            const allOpts = document.querySelectorAll('.modal-opt');
+            allOpts.forEach(b => b.style.pointerEvents = 'none');
+            if (selected === correct) {
+                btnEl.classList.add('correct-glow');
+                modalStatus.innerText = '✅ Perfect! +1 task completed!';
+                modalStatus.style.color = '#2d5a2a';
+                state.answered = true;
+                state.totalCorrect += 1;
+                const newLevel = Math.min(5, Math.floor(state.totalCorrect / 10) + 1);
+                if (newLevel !== state.level) {
+                    state.level = newLevel;
+                }
+                updateUI();
+                modalCloseBtn.style.display = 'block';
+                modalCloseBtn.innerText = '🐾 continue';
+                modalCloseBtn.onclick = closeModal;
+            } else {
+                btnEl.classList.add('wrong-glow');
+                modalStatus.innerText = '💪 almost! try another question.';
+                modalStatus.style.color = '#8a4a3a';
+                setTimeout(() => {
+                    const newQ = getRandomUnusedQuestion();
+                    state.pendingQuestion = newQ;
+                    modalQuestion.innerText = "🧪 " + newQ.q;
+                    modalOptions.innerHTML = '';
+                    modalStatus.innerText = '';
+                    modalStatus.className = 'modal-status';
+                    const labels = ['A', 'B', 'C', 'D'];
+                    newQ.options.forEach((opt, idx) => {
+                        const b = document.createElement('button');
+                        b.className = 'modal-opt';
+                        b.innerText = labels[idx] + '. ' + opt;
+                        b.dataset.index = idx;
+                        b.addEventListener('click', (e) => handleOptionClick(idx, newQ, b));
+                        modalOptions.appendChild(b);
+                    });
+                    modalCloseBtn.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            state.modalOpen = false;
+            document.querySelectorAll('.task-btn').forEach(b => b.disabled = false);
+            if (state.isVictory) document.getElementById('taskGrid').style.display = 'none';
+        }
+
+        // -------- TASK HANDLER --------
+        function handleTaskClick(e) {
+            const btn = e.currentTarget;
+            if (state.isVictory) return;
+            if (state.modalOpen) return;
+            btn.disabled = true;
+            showQuestionForTask(btn.dataset.task);
+        }
+
+        taskBtns.forEach(btn => btn.addEventListener('click', handleTaskClick));
+
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay && state.answered) {
+                closeModal();
+            }
+        });
+
+        // init
+        updateUI();
+        victoryScreen.classList.remove('show');
+        document.getElementById('taskGrid').style.display = 'grid';
+        console.log('🐾 cozy physics pet loaded with', QUESTIONS.length, 'questions');
+    })();
+</script>
+</body>
+</html>

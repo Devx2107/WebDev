@@ -1,0 +1,15 @@
+let a = [ 1, 2,3,4,5,6,7,8,9,10]; // array of numbers
+
+//  Array is likek a doubly linked list, it can store multiple values in a single variable. In this case, the variable 'a' is an array that contains numbers from 1 to 10.
+
+a.pop(); // removes the last element from the array (10)
+console.log(a); // prints the array after removing the last element (10)
+a.push(11); // adds 11 to the end of the array
+console.log(a); // prints the array after adding 11 to the end
+let f = a.pop() ;// removes the last element from the array (11)
+console.log("f" , f ); // prints the removed element (11)
+
+a.unshift(0); // adds 0 to the beginning of the array
+console.log(a); // prints the array after adding 0 to the beginning
+let x = a.shift(); // removes the first element from the array (0)
+console.log("x" , x  ); // prints the removed element (0)
