@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Specificity</title>
+    <style>
+        /* 
+           SPECIFICITY SCORE: 100 Points (THE WINNER)
+           The ID selector is the strongest selector here. 
+           Because an ID (#div) is meant to be completely unique on a page, 
+           the browser prioritizes this rule over classes and element tags.
+        */
+        #div{
+            color: blue;
+        }
+
+        /* 
+           SPECIFICITY SCORE: 10 Points
+           The Class selector is stronger than a basic HTML tag, 
+           but weaker than an ID. If the #div rule didn't exist above, 
+           this rule would win and the text would be red.
+        */
+        .div{
+            color: red;
+        }
+
+        /* 
+           SPECIFICITY SCORE: 1 Point
+           The Element (or tag) selector is the weakest. 
+           It applies to all <div> elements generically, so it 
+           gets easily overridden by the class and the ID.
+        */
+        div{
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+       This div is being targeted by its element tag (div), a class (.div), and an ID (#div). 
+       Because the ID selector (#div) has the highest specificity score (100 points), 
+       it wins the battle. The text rendered on your screen will be BLUE.
+    -->
+    <div class="div" id="div">
+        I am a div
+    </div>
+    
+</body>
+</html>

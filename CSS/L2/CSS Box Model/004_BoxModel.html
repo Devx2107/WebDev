@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>The CSS Box Model</title>
+    <style>
+        .box {
+            /* 1. CONTENT */
+            /* We set the width of the content area */
+            width: 250px;
+            /* We add a background-color so we can see the box */
+            /* Note: Background color fills both the Content AND the Padding */
+            background-color: lightblue; 
+            
+            /* 2. PADDING */
+            /* Adds 20 pixels of space inside the box, around the text */
+            padding: 20px;
+            
+            /* 3. BORDER */
+            /* Creates a 5-pixel solid black line around the box */
+            border: 5px solid black;
+            
+            /* 4. MARGIN */
+            /* Pushes everything else 30 pixels away from the outside of this box */
+            margin: 30px;
+            
+            /* Extra styles mentioned in your syllabus for readability */
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        I am the first box. Look at the space inside me (padding) and outside me (margin)!
+    </div>
+
+    <div class="box">
+        I am the second box. The margin of the first box is pushing me down.
+    </div>
+
+</body>
+</html>

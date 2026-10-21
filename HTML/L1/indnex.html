@@ -1,0 +1,39 @@
+<table border="1">
+  
+  <!-- Caption with a small link next to the title -->
+  <caption>
+    Monthly Expenses for 2026 
+    (<a href="https://example.com/report" target="_blank">View Full Report</a>)
+  </caption>
+  
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Amount</th>
+      <th>Action</th> <!-- We added a new column for our links -->
+    </tr>
+  </thead>
+  
+  <tbody>
+    <tr>
+      <td>Rent</td>
+      <td>$1,200</td>
+      <!-- A little link right inside the data cell -->
+      <td><a href="/receipts/rent.pdf">Download Receipt</a></td> 
+    </tr>
+    <tr>
+      <td>Groceries</td>
+      <td>$400</td>
+      <td><a href="/receipts/groceries.pdf">Download Receipt</a></td>
+    </tr>
+  </tbody>
+  
+  <tfoot>
+    <tr>
+      <td><strong>Total</strong></td>
+      <!-- We use colspan="2" here so the footer stretches nicely under the new Action column -->
+      <td colspan="2"><strong>$1,600</strong></td> 
+    </tr>
+  </tfoot>
+
+</table>

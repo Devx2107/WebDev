@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HTML Only Timetable</title>
+</head>
+<body>
+
+    <!-- border="1" adds the lines, cellspacing="0" merges the borders, cellpadding="20" adds space inside the boxes -->
+    <table border="1" cellspacing="0" cellpadding="20" width="100%" align="center">
+        
+        <!-- ROW 1: Numbers -->
+        <tr align="center">
+            <td></td>
+            <td><b>1</b></td>
+            <td><b>2</b></td>
+            <td><b>3</b></td>
+            <td></td> <!-- Empty cell above the break -->
+            <td colspan="2"><b>4</b></td>
+            <td colspan="2"><b>6</b></td>
+        </tr>
+
+        <!-- ROW 2: Monday -->
+        <tr align="center">
+            <td><b>Mon</b></td>
+            <td>C++</td>
+            <td>HTML</td>
+            <td>CSS</td>
+            <!-- The BREAK column starts here and stretches down 5 rows -->
+            <td rowspan="5"><b>B<br><br>R<br><br>E<br><br>A<br><br>K</b></td>
+            <td colspan="2">JAVA</td>
+            <td colspan="2">C++</td>
+        </tr>
+
+        <!-- ROW 3: Tuesday -->
+        <tr align="center">
+            <td><b>Tue</b></td>
+            <!-- Hindi starts here and stretches down 3 rows -->
+            <td rowspan="3">Hindi</td>
+            <td colspan="2">Web Dev</td>
+            <td>C++</td>
+            <td>HTML</td>
+            <td>CSS</td>
+            <!-- OS starts here and stretches down 2 rows -->
+            <td rowspan="2">OS</td>
+        </tr>
+
+        <!-- ROW 4: Wednesday -->
+        <tr align="center">
+            <td><b>Wed</b></td>
+            <td colspan="2">C++</td>
+            <td colspan="3">Django</td>
+        </tr>
+
+        <!-- ROW 5: Thursday -->
+        <tr align="center">
+            <td><b>Thu</b></td>
+            <td colspan="2">Java</td>
+            <td>English</td>
+            <td>Go</td>
+            <td colspan="2">Networks</td>
+        </tr>
+
+        <!-- ROW 6: Friday -->
+        <tr align="center">
+            <td><b>Fri</b></td>
+            <td colspan="3">Data Science</td>
+            <td colspan="2">C++</td>
+            <td>Go</td>
+            <td>Python</td>
+        </tr>
+
+    </table>
+
+</body>
+</html>

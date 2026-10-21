@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Specificity and The Cascade</title>
+    <style>
+        
+        /* 
+           RULE 1: 
+           The browser reads this first. 
+           It sees an element selector (1 point of specificity) and says, 
+           "Okay, make all divs orange." 
+        */
+        div {
+            color: orange;
+        }
+
+        /* 
+           RULE 2 (THE WINNER): 
+           The browser reads this second. 
+           It sees another element selector (1 point of specificity). 
+           Because this rule has the exact same specificity score as the previous one, 
+           but it comes LATER in the CSS, it overrides Rule 1. 
+           The browser now says, "Never mind the orange, make them purple instead."
+        */
+        div {
+            color: purple;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 
+       Because the purple rule was the last rule read by the browser 
+       in the stylesheet above, the text inside this container will 
+       render as purple on your screen. 
+    -->
+    <div class="div" id="div">
+        I am a div
+    </div>
+    
+</body>
+</html>

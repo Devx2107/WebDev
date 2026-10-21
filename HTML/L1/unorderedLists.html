@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Lists Masterclass</title>
+    
+    <!-- Tailwind CSS for overall layout and beautiful UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        /* 
+           Tailwind automatically removes all list styling (bullets/numbers) by default.
+           We add this custom class to bring back the default browser styles 
+           so our "type" attributes work perfectly in the demo sections. 
+        */
+        .demo-content ul, .demo-content ol {
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        .demo-content ul {
+            list-style: revert;
+        }
+        .demo-content ol {
+            list-style: revert;
+        }
+        .demo-content li {
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="text-gray-800 p-4 md:p-10">
+
+    <div class="max-w-5xl mx-auto space-y-12">
+
+        <!-- Header Section -->
+        <header class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">HTML Lists Masterclass</h1>
+            <p class="text-lg text-gray-600">Comparing ul, ol, nested lists, and building a Flexbox Nav Menu</p>
+        </header>
+
+        <!-- FLEXBOX NAVIGATION MENU EXAMPLE -->
+        <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+            <div class="mb-6 border-b border-gray-100 pb-4">
+                <h2 class="text-2xl font-bold text-indigo-600">1. Flexbox Navigation Menu (using &lt;ul&gt;)</h2>
+                <p class="text-gray-500 text-sm mt-1">Lists aren't just for bullets! By applying CSS Flexbox (using Tailwind classes like <code>flex</code>, <code>justify-center</code>, and <code>space-x-8</code>), we completely remove the bullets and turn a standard list into a beautiful horizontal navbar.</p>
+            </div>
+            
+            <!-- The Nav Bar -->
+            <nav class="bg-gray-900 rounded-xl p-4 shadow-lg">
+                <!-- 
+                  Tailwind Flexbox classes explained:
+                  - flex: Turns the list into a flex container (horizontal row).
+                  - justify-center: Centers the items.
+                  - space-x-8: Adds horizontal spacing between list items.
+                -->
+                <ul class="flex flex-col sm:flex-row justify-center sm:space-x-8 space-y-4 sm:space-y-0 text-white font-medium">
+                    <li><a href="#" class="hover:text-indigo-400 transition-colors block text-center">Home</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition-colors block text-center">About Us</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition-colors block text-center">Services</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition-colors block text-center">Portfolio</a></li>
+                    <li><a href="#" class="hover:text-indigo-400 transition-colors block text-center">Contact</a></li>
+                </ul>
+            </nav>
+        </section>
+
+        <!-- LIST COMPARISON SECTION -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 demo-content">
+            
+            <!-- UNORDERED LISTS -->
+            <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-bold text-blue-600 mb-2">&lt;ul&gt; Unordered Lists</h2>
+                <p class="text-gray-500 mb-6 text-sm">Used when the sequence of items does not matter.</p>
+
+                <h3 class="font-semibold text-gray-700 mt-4 mb-2">Default (Disc)</h3>
+                <!-- type="disc" is the default browser behavior -->
+                <ul type="disc" class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <li>Apples</li>
+                    <li>Bananas</li>
+                    <li>Cherries</li>
+                </ul>
+
+                <h3 class="font-semibold text-gray-700 mt-6 mb-2">Type = "circle"</h3>
+                <ul type="circle" class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <li>Front-end Development</li>
+                    <li>Back-end Development</li>
+                    <li>Database Management</li>
+                </ul>
+
+                <h3 class="font-semibold text-gray-700 mt-6 mb-2">Type = "square"</h3>
+                <ul type="square" class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>JavaScript</li>
+                </ul>
+            </section>
+
+            <!-- ORDERED LISTS -->
+            <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                <h2 class="text-2xl font-bold text-emerald-600 mb-2">&lt;ol&gt; Ordered Lists</h2>
+                <p class="text-gray-500 mb-6 text-sm">Used when items follow a specific sequence or ranking.</p>
+
+                <h3 class="font-semibold text-gray-700 mt-4 mb-2">Default (Numbers / type="1")</h3>
+                <ol type="1" class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                    <li>Preheat the oven to 350°F.</li>
+                    <li>Mix dry ingredients in a bowl.</li>
+                    <li>Bake for 45 minutes.</li>
+                </ol>
+
+                <h3 class="font-semibold text-gray-700 mt-6 mb-2">Type = "A" (Uppercase Letters)</h3>
+                <ol type="A" class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                    <li>Identify the problem.</li>
+                    <li>Develop a hypothesis.</li>
+                    <li>Test the hypothesis.</li>
+                </ol>
+
+                <h3 class="font-semibold text-gray-700 mt-6 mb-2">Type = "I" (Roman Numerals)</h3>
+                <ol type="I" class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                    <li>Introduction</li>
+                    <li>Main Body Context</li>
+                    <li>Conclusion</li>
+                </ol>
+            </section>
+        </div>
+
+        <!-- NESTED LISTS SECTION -->
+        <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 demo-content">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-purple-600">3. Nested Lists (Lists Inside Lists)</h2>
+                <p class="text-gray-500 text-sm mt-1">You can put an entire list inside an <code>&lt;li&gt;</code> tag to create sub-lists. Browsers automatically change the bullet style for nested unordered lists.</p>
+            </div>
+
+            <div class="bg-purple-50 p-6 rounded-xl border border-purple-100">
+                <h3 class="text-lg font-bold text-purple-900 mb-4">Web Development Curriculum</h3>
+                
+                <!-- Main Ordered List -->
+                <ol type="I" class="text-purple-900 font-medium">
+                    <li>Frontend Technologies
+                        <!-- Nested Unordered List inside the first <li> -->
+                        <ul type="disc" class="font-normal text-gray-700 mt-2">
+                            <li>HTML5
+                                <!-- Deeply Nested List -->
+                                <ul type="circle" class="text-sm mt-1">
+                                    <li>Semantic Tags</li>
+                                    <li>Forms and Inputs</li>
+                                </ul>
+                            </li>
+                            <li class="mt-2">CSS3
+                                <ul type="circle" class="text-sm mt-1">
+                                    <li>Flexbox</li>
+                                    <li>CSS Grid</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <li class="mt-4">Backend Technologies
+                        <ul type="disc" class="font-normal text-gray-700 mt-2">
+                            <li>Node.js</li>
+                            <li>Python
+                                <ol type="a" class="text-sm mt-1">
+                                    <li>Django</li>
+                                    <li>Flask</li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
