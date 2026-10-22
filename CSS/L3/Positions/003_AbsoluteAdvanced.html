@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Positioning Example</title>
+    <style>
+        div {
+            border: 1px solid black;
+            padding: 20px;
+            margin: 10px;
+        }
+
+        .grandparent {
+            position: relative;
+        }
+
+        .parent {
+            position: relative;
+        }
+
+        .div-2 {
+            border: 1px solid red;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: orange;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grandparent" style="border: 2px solid purple;">
+        I am grandparent DIV
+        
+        <div class="parent">
+            I am parent DIV
+            
+            <div class="div-2">
+                I am div-2 (Absolutely Positioned)
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

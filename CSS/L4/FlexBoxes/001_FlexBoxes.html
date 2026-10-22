@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inline Block Example</title>
+    <style>
+        .container {
+            /*To use flexbox, we need to set display property to flex*/
+            display: flex;
+            background-color: rgba(17, 181, 236, 0.801);
+            width: 100%;
+            margin : auto;
+            flex-wrap: wrap;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+        }
+        .div {
+            height: 40px;
+            width: 40px;
+            margin: 10px;
+            background-color: orange;
+            line-height: 40px;
+            text-align: center;
+            
+            /* DIV ko hum log block ke bajaye inline kar dete hai */
+            /* display: inline; */
+            
+            /* To make inline elements but make sure height and width works on it, we use inline-block */
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="div div-0">0</div>
+        <div class="div div-1">1</div>
+        <div class="div div-2">2</div>
+        <div class="div div-3">3</div>
+        <div class="div div-4">4</div>
+        <div class="div div-5">5</div>
+        <div class="div div-6">6</div>
+        <div class="div div-7">7</div>
+        <div class="div div-8">8</div>
+        <!-- <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div>
+        <div class="div div-8">8</div> -->
+                
+        <div class="flex">
+            
+        </div>
+
+    </div>
+
+</body>
+</html>
