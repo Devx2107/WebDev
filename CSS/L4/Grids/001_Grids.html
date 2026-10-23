@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Grid Layout</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+        }
+
+        /* THE GRID CONTAINER */
+        .grid-container {
+            display: grid;
+            
+            /* 1. Define Columns: A narrow sidebar (250px) and a main area that takes up the rest (1fr) */
+            grid-template-columns: 250px 1fr;
+            
+            /* 2. Define Rows: A 60px header, a tall middle section (min 400px), and a 50px footer */
+            grid-template-rows: 60px minmax(400px, auto) 50px;
+            
+            gap: 10px;
+            padding: 10px;
+            height: 100vh;
+        }
+
+        /* GRID ITEMS Styling & Positioning */
+        .item {
+            background-color: #e0f2fe;
+            border: 2px solid #29cf4d;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(255, 1, 1, 0.1);
+        }
+
+        /* The Header needs to stretch across both columns */
+        .header {
+            grid-column: 1 / 3; /* Start at line 1, end at line 3 */
+            background-color: #bae6fd;
+        }
+
+        /* The Sidebar sits naturally in column 1, row 2 */
+        .sidebar {
+            background-color: #7dd3fc;
+        }
+
+        /* The Main content sits naturally in column 2, row 2 */
+        .main {
+            background-color: #38bdf8;
+        }
+
+        /* The Footer needs to stretch across both columns */
+        .footer {
+            grid-column: 1 / 3; 
+            background-color: #bae6fd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-container">
+        <div class="item header">Header (Spans 2 columns)</div>
+        <div class="item sidebar">Sidebar</div>
+        <div class="item main">Main Content Area</div>
+        <div class="item footer">Footer (Spans 2 columns)</div>
+    </div>
+
+</body>
+</html>

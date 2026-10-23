@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox Assignment</title>
+    <style>
+        /* CSS Reset for consistent rendering */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: monospace; /* Matching the font style in the header */
+        }
+
+        body {
+            background-color: #f4f4f4; /* Light grey background for main area */
+        }
+
+        /* --- HEADERS --- */
+        .main-header {
+            background-color: #222; /* Very dark grey */
+            color: white;
+            padding: 20px 40px;
+            font-size: 24px;
+        }
+
+        .sub-header {
+            background-color: #333; /* Slightly lighter dark grey */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- FLEXBOX CONTAINER --- */
+        .card-container {
+            /* This is the magic! Turns the container into a Flexbox */
+            display: flex; 
+            
+            /* Centers the cards horizontally */
+            justify-content: center; 
+            
+            /* If the screen is too small, allow the cards to wrap to the next line */
+            flex-wrap: wrap; 
+            
+            /* Adds consistent space between the cards */
+            gap: 20px; 
+            
+            padding: 40px;
+        }
+
+        /* --- INDIVIDUAL CARDS --- */
+        .card {
+            background-color: white;
+            border-radius: 8px; /* Rounded corners */
+            padding: 15px;
+            width: 250px; /* Fixed width for uniformity */
+            text-align: center; /* Centers the text inside the card */
+            
+            /* Adds the subtle shadow effect seen in the image */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            
+            font-family: sans-serif;
+        }
+
+        /* Image styling inside the card */
+        .card img {
+            width: 100%; /* Makes image fill the width of the card */
+            border-radius: 4px; /* Slightly round the image corners too */
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 12px;
+            color: #777;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Sections -->
+    <header class="main-header">
+        Assignment - Flexboxes
+    </header>
+    <div class="sub-header">
+        FlexBox Card Layout
+    </div>
+
+    <!-- Main Flexbox Layout Area -->
+    <!-- The display: flex property on this container handles alignment automatically -->
+    <main class="card-container">
+        
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/f4/Captain_America.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original">
+            <h3>Card Title 1</h3>
+            <p>Short description for card 1.</p>
+        </div>
+
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/f4/Captain_America.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" alt="Placeholder Image">
+            <h3>Card Title 2</h3>
+            <p>Short description for card 2.</p>
+        </div>
+
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/f4/Captain_America.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" alt="Placeholder Image">
+            <h3>Card Title 3</h3>
+            <p>Short description for card 3.</p>
+        </div>
+
+        <div class="card">
+            <img src="https://upload.wikimedia.org/wikipedia/en/f/f4/Captain_America.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original" alt="Placeholder Image">
+            <h3>Card Title 4</h3>
+            <p>Short description for card 4.</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

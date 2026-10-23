@@ -1,0 +1,36 @@
+/* 1. Targeting the Logo text */
+.logo-info {
+    position: relative; /* Crucial: This anchors the absolute pseudo-elements! */
+}
+
+/* 2. Using ::before to inject a decorative dot */
+.logo-info::before {
+    content: "•";           /* Injects the bullet point character */
+    color: #000;            /* Black color */
+    font-size: 50px;        /* Make it slightly larger */
+    margin-right: 15px;     /* Space between the dot and 'Medium' */
+    
+    /* Small vertical adjustment to align the dot perfectly with the text */
+    position: relative;
+    top: -5px; 
+}
+
+/* 3. Using ::after to create an animated underline effect on hover */
+.logo-info::after {
+    content: "";            /* Empty content, we just want the physical box */
+    position: absolute;     /* Anchor it to .logo-info */
+    bottom: 5px;            /* Place it near the bottom of the container */
+    left: 40px;             /* Shift it right past the bullet point */
+    
+    height: 3px;            /* Thickness of the underline */
+    width: 0%;              /* Start invisible (0 width) */
+    background-color: black; 
+    
+    /* Smooth animation when the width changes */
+    transition: width 0.3s ease; 
+}
+
+/* 4. Triggering the ::after animation on hover */
+.logo-info:hover::after {
+    width: 140px;           /* Expand the underline to cover 'Medium' */
+}
