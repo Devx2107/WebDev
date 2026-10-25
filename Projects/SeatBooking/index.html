@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanilla Seat Booking</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        /* Seat Grid */
+        .seat-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .seat {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px 6px 2px 2px;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        /* Seat States */
+        .seat.available {
+            background-color: lightgray;
+            cursor: pointer;
+        }
+        .seat.available:hover {
+            transform: scale(1.1);
+        }
+
+        .seat.selected {
+            background-color: #4CAF50; /* Green */
+            cursor: pointer;
+        }
+        .seat.selected:hover {
+            transform: scale(1.1);
+        }
+
+        .seat.reserved {
+            background-color: #f44336; /* Red */
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* Button */
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Status */
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+            height: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Mini Seat Booking</h1>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="color-box" style="background-color: lightgray;"></div>
+                <span>Available</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #4CAF50;"></div>
+                <span>Selected</span>
+            </div>
+            <div class="legend-item">
+                <div class="color-box" style="background-color: #f44336;"></div>
+                <span>Reserved</span>
+            </div>
+        </div>
+
+        <div class="seat-grid" id="seat-grid">
+            <!-- Seats injected by JS -->
+        </div>
+
+        <button id="book-btn">Book Selected Seats</button>
+        
+        <p id="status"></p>
+    </div>
+
+    <script>
+        // Configuration
+        const totalSeats = 36; // 6x6 grid
+        const reservationTime = 10000; // 10 seconds in milliseconds
+
+        const seatGrid = document.getElementById('seat-grid');
+        const bookBtn = document.getElementById('book-btn');
+        const statusMsg = document.getElementById('status');
+
+        // 1. Generate Seats
+        for (let i = 0; i < totalSeats; i++) {
+            const seat = document.createElement('div');
+            seat.classList.add('seat', 'available');
+            seatGrid.appendChild(seat);
+        }
+
+        // 2. Handle Seat Click events via Event Delegation
+        seatGrid.addEventListener('click', function(e) {
+            const target = e.target;
+            
+            // Make sure the clicked element is a seat
+            if (!target.classList.contains('seat')) return;
+
+            // If reserved, do nothing
+            if (target.classList.contains('reserved')) return;
+
+            // Toggle between available and selected
+            if (target.classList.contains('available')) {
+                target.classList.remove('available');
+                target.classList.add('selected');
+            } else if (target.classList.contains('selected')) {
+                target.classList.remove('selected');
+                target.classList.add('available');
+            }
+        });
+
+        // 3. Handle Book Button
+        bookBtn.addEventListener('click', function() {
+            // Find all seats with the 'selected' class
+            const selectedSeats = document.querySelectorAll('.seat.selected');
+
+            if (selectedSeats.length === 0) {
+                statusMsg.textContent = "Please select at least one seat first.";
+                statusMsg.style.color = "#f44336";
+                return;
+            }
+
+            // Convert selected seats to reserved
+            selectedSeats.forEach(function(seat) {
+                seat.classList.remove('selected');
+                seat.classList.add('reserved');
+            });
+
+            statusMsg.textContent = `Reserved ${selectedSeats.length} seat(s) for 10 seconds...`;
+            statusMsg.style.color = "#4CAF50";
+
+            // 4. Set Timer to reset seats after 10 seconds
+            setTimeout(function() {
+                selectedSeats.forEach(function(seat) {
+                    seat.classList.remove('reserved');
+                    seat.classList.add('available');
+                });
+                statusMsg.textContent = "Reservation expired. Seats are available again.";
+                statusMsg.style.color = "#666";
+            }, reservationTime);
+        });
+    </script>
+</body>
+</html>
