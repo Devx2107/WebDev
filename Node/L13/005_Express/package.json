@@ -1,0 +1,18 @@
+{
+  "name": "005_express",
+  "version": "1.0.0",
+  "description": "A simple Express.js application",
+  "license": "ISC",
+  "author": "DevX",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
+// This is a `package.json` file for a simple Express.js application. It includes metadata about the project, such as its name, version, description, license, author, and main entry point. The `type` is set to "commonjs", indicating that the project uses CommonJS modules.
+

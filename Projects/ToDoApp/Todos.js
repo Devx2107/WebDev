@@ -1,0 +1,1 @@
+// fetch data from json placeholder todos and fetch suing axios and using Dom data show nicely 

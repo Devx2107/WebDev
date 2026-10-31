@@ -1,5 +1,5 @@
 let apiKey = '68eb9a82e650df54c98feebbf88e20d7';
-let button = document.querySelector('button');
+let button = document.querySelector('button');  
 let input = document.querySelector('input');
 
 geoURL = (city) => {
