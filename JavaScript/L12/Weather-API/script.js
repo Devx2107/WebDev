@@ -31,6 +31,7 @@ button.addEventListener('click', () => {
                     let data = res.data;
                     console.log(data);
                 })
+            
 
         })
         .catch(err => {

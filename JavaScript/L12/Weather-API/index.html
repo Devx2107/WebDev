@@ -3,20 +3,19 @@
 
 <head>
     <title>Document</title>
-
-    <style>
-        input{
-            width: 30%;
-            height: 30px;
-        }
-    </style>
+    <link rel = "stylesheet" href = "./style.css">
 </head>
 
 <body>
+    <main class="weather-app">
+        <h1>Weather Finder</h1>
 
-    <input type="text" placeholder="Enter city to know weather">
-    <button>Search Weather</button>
-   
+        <div class="search-box">
+            <input type="text" placeholder="Enter city to know weather">
+            <button>Search Weather</button>
+        </div>
+    </main>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./script.js"></script>
 </body>
