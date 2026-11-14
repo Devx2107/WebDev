@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <h1>Todo App</h1>
+    <form action ="/todos" method="POST">
+        <input type="text" name="name" >
+        <button type="submit">Add Todo</button>    
+    </form>
+    <button id="btn">Get Todos</button>
+    <div id="tasks">
+        {{#each todos as |t|}}
+        <li>{{t}}</li>
+        {{/each}}
+    </div>
+
+</body>
+
+</html>
+
+{{!-- also do the pug and hga adaptions of this version --}}

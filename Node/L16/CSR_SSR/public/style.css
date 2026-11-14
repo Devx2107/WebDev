@@ -1,0 +1,174 @@
+
+/* ============================================
+   TODO APP — WEB3 QUANTUM PROTOCOL EDITION
+   ============================================ */
+
+h1 {
+    position: relative;
+    isolation: isolate;
+    display: table;
+    margin: 70px auto;
+    padding: 35px 55px;
+
+    /* CYBER TYPOGRAPHY */
+    font-family: 'Orbitron', 'Arial Black', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    line-height: 1.2;
+
+    /* LIQUID RGB TEXT */
+    color: transparent;
+    background: linear-gradient(
+        90deg,
+        #00f5ff,
+        #ffffff,
+        #a855f7,
+        #ff00c8,
+        #00ffa3,
+        #00f5ff
+    );
+    background-size: 400% 400%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* HOLOGRAPHIC GLOW */
+    filter:
+        drop-shadow(0 0 5px #00f5ff)
+        drop-shadow(0 0 15px #00aaff)
+        drop-shadow(0 0 35px #a855f7);
+
+    /* HOLOGRAM MOVEMENT */
+    animation:
+        hologram 6s linear infinite,
+        levitate 3s ease-in-out infinite alternate;
+
+    transition: .4s ease;
+}
+
+/* NEON QUANTUM FRAME */
+
+h1::before {
+    content: "";
+    position: absolute;
+    inset: -12px;
+    z-index: -1;
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,245,255,.13),
+            rgba(168,85,247,.12),
+            rgba(255,0,200,.12)
+        );
+
+    border: 1px solid rgba(0,245,255,.6);
+
+    box-shadow:
+        0 0 10px #00f5ff,
+        0 0 25px rgba(0,245,255,.5),
+        0 0 60px rgba(168,85,247,.25),
+        inset 0 0 25px rgba(0,245,255,.15);
+
+    backdrop-filter: blur(15px);
+
+    animation: framePulse 2s ease-in-out infinite alternate;
+}
+
+/* SCANNING LASER UNDERLINE */
+
+h1::after {
+    content: "";
+    position: absolute;
+    height: 3px;
+    bottom: -22px;
+    left: 0;
+    width: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #00f5ff,
+        #a855f7,
+        #ff00c8,
+        #00f5ff,
+        transparent
+    );
+
+    background-size: 200% 100%;
+
+    box-shadow:
+        0 0 10px #00f5ff,
+        0 0 25px #a855f7,
+        0 0 45px #ff00c8;
+
+    animation: laser 3s linear infinite;
+}
+
+/* HOVER: UNLOCK GOD MODE */
+
+h1:hover {
+    letter-spacing: 13px;
+    transform: perspective(800px) rotateX(8deg) scale(1.06);
+
+    filter:
+        brightness(1.5)
+        drop-shadow(0 0 15px #00f5ff)
+        drop-shadow(0 0 35px #a855f7)
+        drop-shadow(0 0 70px #ff00c8);
+}
+
+/* ANIMATIONS */
+
+@keyframes hologram {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 400% 50%;
+    }
+}
+
+@keyframes levitate {
+    from {
+        translate: 0 0;
+    }
+    to {
+        translate: 0 -12px;
+    }
+}
+
+@keyframes framePulse {
+    from {
+        opacity: .65;
+        filter: hue-rotate(0deg);
+    }
+    to {
+        opacity: 1;
+        filter: hue-rotate(60deg);
+    }
+}
+
+@keyframes laser {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 200% 50%;
+    }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    h1,
+    h1::before,
+    h1::after {
+        animation: none;
+        transition: none;
+    }
+}
