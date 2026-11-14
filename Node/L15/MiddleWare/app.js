@@ -14,7 +14,7 @@ app.use(function (req, res, next) {
 //     return res.send("Please provide name");
 //   }
   next();
-});
+}); 
 
 // Works for    : /user/42 or /user/42/details or /user/42/details/..../test
 app.use("/user/:id", (req, res, next) => {
@@ -30,8 +30,9 @@ app.use("/person/settings", (req, res, next) => {
 });
 
 app.get('/person/settings/all',(req,res)=>{
-    res.send("Updated person settings");
-})
+    res.send("Updated person settings"); // you can also send a html file isntead of sending all files to a error message like a html message 
+    res.sendFile ( path.join ( __dirname, "404.html"));
+  })
 
 app.get("/", (req, res) => {
   const { name } = req.query;
