@@ -19,6 +19,7 @@
     </form>
 
     <ul id="tasks">
+        
         {{#each todos as |t|}}
         <li>
             <span>{{t}}</span>
@@ -35,8 +36,12 @@
                 <input type="hidden" name="index" value="{{@index}}">
                 <button type="submit">Delete</button>
             </form>
+           <a href="/increase/{{@index}}"><button type="button">👆</button></a>
+<a href="/decrease/{{@index}}"><button type="button">👇</button></a>
         </li>
         {{/each}}
+        
+
     </ul>
 </body>
 
