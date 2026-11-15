@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    Todo App 
+const path = require("path");
+const express = require("express");
+const app = express();
+const PORT = 4444;
 
-    <button id="btn">Get Todos</button>
-    <div id="tasks">
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-    </div>
+let todos = ["Cricket", "Dance", "Sing"];
+app.get("/todos", (req, res) => {
+  res.send(todos);
+});
 
-    <script src="./script.js"></script>
-</body>
-</html>
+app.listen(PORT, () => {
+  console.log(`http://localhost:` + PORT);
+});
