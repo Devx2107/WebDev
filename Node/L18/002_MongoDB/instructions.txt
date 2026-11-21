@@ -1,0 +1,5 @@
+ create the db 
+run npm i mongoose 
+create the mode ( whic si created form the schema ) 
+model is also collections , 
+add the document to the collections 

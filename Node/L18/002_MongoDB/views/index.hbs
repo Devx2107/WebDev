@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Todo application </h1>
+    <form action="/add-todo"  method="post">
+        <input type="text" name="todo"  placeholder="Enter the todo name here">
+        <button type="submit">Add Todo</button>
+    </form>
+
+    <div id="todolist">
+        {{#each todos as |t|}}
+        <li>{{t.name}}
+            <a href="/increase-todo/{{t._id}}">⬆️</a>
+            <a href="/decrease-todo/{{t._id}}">⬇️</a>
+            <a href="/delete-todo/{{t._id}}">❌</a>
+        </li>
+        {{/each}}
+    </div>
+</body>
+</html>
